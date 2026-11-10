@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class PostCreateRequest {
+public class PostCreateRequest {
     @NotBlank
     @Size(max = 50)
     private String title;
 
-    @NotEmpty
+    @NotBlank
     private String content;
 
-    @NotEmpty
+    @NotBlank
     private String author;
 }
