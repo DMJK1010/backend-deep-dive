@@ -3,6 +3,7 @@ package com.example.simple_board.service;
 import com.example.simple_board.domain.Post;
 import com.example.simple_board.dto.PostCreateRequest;
 import com.example.simple_board.dto.PostResponse;
+import com.example.simple_board.dto.PostUpdateRequest;
 import com.example.simple_board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,7 @@ public class PostService {
     }
 
     public PostResponse getPost(Long id){
-        Optional<Post> optionalPost = postRepository.findById(id);
-        Post post = optionalPost.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다. id=" + id));
+        Post post = findPostById(id);
         return PostResponse.from(post);
     }
 
@@ -38,6 +38,22 @@ public class PostService {
         }
 
         return responseList;
+    }
+
+    public PostResponse updatePost(Long id, PostUpdateRequest request) {
+        Post post = findPostById(id);
+        post.update(request.getTitle(), request.getContent());
+        return PostResponse.from(post);
+    }
+
+    public void deletePost(Long id){
+        Post post = findPostById(id);
+        postRepository.delete(post.getId());
+    }
+
+    private Post findPostById(Long id){
+        Optional<Post> optionalPost = postRepository.findById(id);
+        return optionalPost.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다. id=" + id));
     }
 
 }
